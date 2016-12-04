@@ -7,9 +7,41 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-88367285-1', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="container">
+		  <% flash.each do |key, value| %>
+		    <div class="alert alert-<%= key %>">
+		      <%= value %>
+		    </div>
+		  <% end %>
+		</div>
+
+		<% if user_signed_in? %>
+		  Logged in as <strong><%= current_user.email %></strong>.
+		  <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+		  <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+		<% else %>
+		  <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+		  <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+		<% end %>
+
+		<%= yield :top_content %>
+
+		<div class="container">
+		    <h1><%= yield :header %></h1>
+		  <%= yield %>
+		</div>
   </body>
 </html>
